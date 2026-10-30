@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Go With The Flow – Make choices, ship a landing page</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Oswald:wght@600;700&family=Cormorant+Garamond:wght@400;500&family=Syne:wght@600;700&display=swap">
+<noscript><style>.r{opacity:1!important;transform:none!important}</style></noscript>
+<style>
+:root{--bg:#f6f5f1;--surface:#fff;--ink:#14141b;--muted:#5f5f6b;--line:rgba(20,20,27,.12);--accent:#b6ff3b;--on-accent:#0a0a0f;--violet:#7c5cff;--atext:#5b3df5;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0a0f;--surface:#15151d;--ink:#f2f2f5;--muted:#9a9aab;--line:rgba(255,255,255,.1);--atext:#b6ff3b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a0a0f;--surface:#15151d;--ink:#f2f2f5;--muted:#9a9aab;--line:rgba(255,255,255,.1);--atext:#b6ff3b;color-scheme:dark}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 5rem)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "Plus Jakarta Sans",system-ui,sans-serif;overflow-x:clip}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:40}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1150px;margin:auto;padding:0 20px}
+section{padding:clamp(56px,9vw,110px) 0}
+h1,h2,h3{margin:0;line-height:1.05;letter-spacing:-.035em}
+h2{font-size:clamp(2rem,5vw,3.4rem);font-weight:800}
+.eyebrow{font-size:.75rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--atext);margin-bottom:14px}
+.muted{color:var(--muted)}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;gap:12px}
+.logo{font-weight:800;letter-spacing:-.03em;display:flex;align-items:center;gap:8px}
+.logo i{width:22px;height:22px;border-radius:7px;background:linear-gradient(135deg,var(--accent),var(--violet));display:inline-block}
+nav.links{display:none;gap:26px;font-size:.9rem;font-weight:500}
+nav.links a:hover{color:var(--atext)}
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:12px 22px;font-weight:700;font-size:.9rem;background:var(--accent);color:var(--on-accent);border:0;cursor:pointer;transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.ico{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;font-size:1rem;transition:background .2s,transform .3s}
+.ico:hover{background:var(--surface)}
+#theme,#gh{display:grid;place-items:center;padding:0}
+#gh svg{width:20px;height:20px;fill:currentColor}
+@media(max-width:479px){#gh{display:none}}
+#theme svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .4s}
+#theme:hover svg{transform:rotate(25deg)}
+#theme .sun{display:none}
+:root[data-theme="dark"] #theme .sun{display:block}
+:root[data-theme="dark"] #theme .moon{display:none}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) #theme .sun{display:block}:root:not([data-theme="light"]) #theme .moon{display:none}}
+#mb{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px}
+#mb span{width:20px;height:2px;background:var(--ink);transition:.3s}
+#mb[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+#mb[aria-expanded="true"] span:nth-child(2){opacity:0}
+#mb[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+#mm{border-top:1px solid var(--line);padding:8px 20px 18px}
+#mm a{display:block;padding:14px 0;border-bottom:1px solid var(--line);font-weight:600}
+@media(min-width:800px){nav.links{display:flex}#mb,#mm{display:none!important}}
+.hero{position:relative;overflow:hidden;padding-top:clamp(40px,7vw,90px)}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.35;animation:float 12s ease-in-out infinite;pointer-events:none}
+.b1{width:380px;height:380px;background:var(--violet);top:-80px;right:-60px}
+.b2{width:300px;height:300px;background:var(--accent);bottom:-60px;left:-80px;animation-delay:-5s;opacity:.22}
+@keyframes float{50%{transform:translate(30px,-30px) scale(1.1)}}
+.hgrid{position:relative;display:grid;gap:40px;align-items:center}
+@media(min-width:900px){.hgrid{grid-template-columns:1.1fr 1fr}}
+h1{font-size:clamp(2.6rem,8vw,5.6rem);font-weight:800}
+.grad{background:linear-gradient(90deg,var(--atext),var(--violet),#ff5fa2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{font-size:1.15rem;max-width:520px;margin:22px 0 28px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.term{background:#0d0d14;color:#e8e8ee;border-radius:18px;border:1px solid rgba(255,255,255,.1);box-shadow:0 30px 80px -20px rgba(124,92,255,.5);transform:rotate(1.5deg);transition:transform .4s}
+.term:hover{transform:rotate(0)}
+.dots{display:flex;gap:7px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.dots i{width:11px;height:11px;border-radius:50%;background:#ff5f57}.dots i:nth-child(2){background:#febc2e}.dots i:nth-child(3){background:#28c840}
+#term{font:500 .82rem/1.9 ui-monospace,Menlo,Consolas,monospace;padding:18px;min-height:250px}
+#term .c{color:#b6ff3b}#term .q{color:#c7c7d6}#term .ok{color:#28c840}
+#term div:last-child::after{content:"▍";animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.strip{border-block:1px solid var(--line);overflow:hidden;padding:18px 0}
+.mq{display:flex;width:max-content;gap:48px;white-space:nowrap;font-weight:800;font-size:1.5rem;letter-spacing:-.02em;animation:mq 28s linear infinite}
+.mq b{color:var(--atext)}
+@keyframes mq{to{transform:translateX(-50%)}}
+.track{height:4px;border-radius:4px;background:var(--line);margin:34px 0;overflow:hidden}
+.track i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--violet));transition:width 1.6s cubic-bezier(.2,.7,.2,1) .3s}
+.track.in i{width:100%}
+.steps{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:26px;transition:transform .3s,border-color .3s}
+.card:hover{transform:translateY(-6px);border-color:var(--violet)}
+.num{width:38px;height:38px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-weight:800;margin-bottom:16px}
+.card h3{font-size:1.25rem;margin-bottom:8px}
+code,pre{font-family:ui-monospace,Menlo,Consolas,monospace}
+.mini{margin-top:14px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:.75rem;color:var(--muted);overflow-x:auto}
+.bento{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:640px){.bento{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.bento{grid-template-columns:repeat(4,1fr)}.w2{grid-column:span 2}.h2r{grid-row:span 2}}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:.8rem;font-weight:600;background:var(--bg);cursor:default}
+button.chip{cursor:pointer;color:var(--ink);font-family:inherit}
+button.chip[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.demo{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--violet));margin-top:18px}
+.demo[data-l="subtle"]{animation:fade 1.8s ease-in-out infinite}
+.demo[data-l="expressive"]{animation:bounce 1s ease-in-out infinite}
+@keyframes fade{50%{opacity:.25}}@keyframes bounce{50%{transform:translateY(-14px) rotate(12deg)}}
+.big{font-size:3.2rem;font-weight:800;letter-spacing:-.04em;color:var(--atext);line-height:1}
+.try{display:grid;gap:24px}@media(min-width:960px){.try{grid-template-columns:330px 1fr}}
+.ctl h3{font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin:20px 0 10px}.ctl h3:first-child{margin-top:0}
+.cfg{background:#0d0d14;color:#c7c7d6;border-radius:14px;padding:14px;font-size:.74rem;line-height:1.7;margin-top:20px;overflow-x:auto;white-space:pre}.cfg b{color:#b6ff3b;font-weight:500}
+.bw{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--surface);box-shadow:0 30px 70px -30px rgba(0,0,0,.45)}
+.bbar{display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:1px solid var(--line)}.bbar i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.bbar span{margin-left:10px;flex:1;background:var(--bg);border-radius:999px;padding:3px 12px;font-size:.72rem;color:var(--muted)}
+#pv{background:var(--sbg);color:var(--sink);font-family:"Plus Jakarta Sans",sans-serif;min-height:440px;overflow:hidden;position:relative}
+#pv,#pv *{transition:background .5s,color .5s,border-radius .5s,border-color .5s}
+.sh{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 22px;border-bottom:1px solid color-mix(in srgb,var(--sink) 14%,transparent);font-size:.8rem}
+.sh b{font-family:var(--shf);font-size:1.1rem;text-transform:var(--sht)}
+.sl{display:none;gap:16px;opacity:.7}@media(min-width:620px){.sl{display:flex}}
+.sb{background:var(--sacc);color:var(--sacct);padding:7px 14px;border-radius:var(--srb);font-weight:700;font-size:.75rem}
+.hp{padding:36px 22px 28px;background:var(--shb);color:var(--shc);position:relative;overflow:hidden}
+.hp small{text-transform:uppercase;letter-spacing:.2em;font-size:.65rem;color:var(--sacc);font-weight:700;display:block}
+.hp h4{font:var(--shw) var(--shs)/1 var(--shf);text-transform:var(--sht);letter-spacing:var(--shl);margin:12px 0;max-width:18ch;position:relative}
+.hp p{font-size:.85rem;opacity:.75;max-width:40ch;margin:0 0 18px;position:relative}
+.hp a{display:inline-block;margin:0 8px 8px 0;padding:9px 16px;font-size:.75rem;font-weight:700;border-radius:var(--srb);background:var(--sacc);color:var(--sacct);position:relative}
+.hp a+a{background:transparent;color:inherit;border:1px solid currentColor}
+.hp::after{content:"";position:absolute;right:-40px;top:-40px;width:170px;height:170px;border-radius:50%;background:var(--sacc);filter:blur(50px);opacity:var(--sglow)}
+.gi{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:22px}
+.gi div{border:1px solid color-mix(in srgb,var(--sink) 14%,transparent);border-radius:var(--srr);padding:10px;font-size:.72rem;font-weight:600}
+.gi div::before{content:"";display:block;aspect-ratio:4/3;margin-bottom:8px;border-radius:calc(var(--srr)*.6);background:repeating-linear-gradient(45deg,color-mix(in srgb,var(--sink) 8%,transparent) 0 6px,transparent 6px 12px);border:1px dashed color-mix(in srgb,var(--sink) 20%,transparent)}
+.hp.go small,.hp.go h4,.hp.go p,.hp.go a{animation:up .7s both}.hp.go h4{animation-delay:.12s}.hp.go p{animation-delay:.22s}.hp.go a{animation-delay:.32s}
+@keyframes up{from{opacity:0;transform:translateY(18px)}}
+details{border-bottom:1px solid var(--line);padding:18px 0}summary{cursor:pointer;font-weight:700;font-size:1.05rem;list-style:none;display:flex;justify-content:space-between;gap:16px}
+summary::-webkit-details-marker{display:none}summary::after{content:"+";color:var(--atext);font-size:1.4rem;line-height:1;transition:transform .3s}details[open] summary::after{transform:rotate(45deg)}details p{color:var(--muted);margin:10px 0 0}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media(min-width:800px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stats .card{text-align:center}
+.code{position:relative;background:#0d0d14;color:#e8e8ee;border-radius:20px;padding:22px;font-size:.85rem;overflow-x:auto;line-height:1.9}
+.code .cm{color:#7d7d92}
+.copy{position:absolute;top:12px;right:12px;font-size:.75rem;padding:6px 12px}
+.tree{white-space:pre;font-size:.8rem;line-height:1.7;color:var(--muted);overflow-x:auto}
+.two{display:grid;gap:20px}@media(min-width:900px){.two{grid-template-columns:1fr 1fr}}
+.final{text-align:center;background:var(--surface);border:1px solid var(--line);border-radius:32px;padding:clamp(36px,8vw,90px) 20px;position:relative;overflow:hidden}
+footer{padding:30px 0 40px;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)}
+.r{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.r.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.r{opacity:1;transform:none;transition:none}.blob,.mq,.demo,#term div:last-child::after{animation:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a href="#" class="logo"><i></i>Go With The Flow</a>
+    <nav class="links"><a href="#how">How it works</a><a href="#features">Features</a><a href="#styles">Styles</a><a href="#start">Quick start</a></nav>
+    <div style="display:flex;gap:10px;align-items:center">
+      <a class="ico" id="gh" href="https://github.com/therohantomar/go_with_theflow" target="_blank" rel="noopener" aria-label="Go With The Flow on GitHub" title="View on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg></a>
+      <button class="ico" id="theme" aria-label="Switch between light and dark mode" title="Switch theme"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+      <a href="#start" class="btn" style="padding:10px 18px">Get started</a>
+      <button class="ico" id="mb" aria-label="Toggle menu" aria-expanded="false" aria-controls="mm"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div id="mm" hidden><a href="#how">How it works</a><a href="#features">Features</a><a href="#styles">Styles</a><a href="#start">Quick start</a><a href="https://github.com/therohantomar/go_with_theflow" target="_blank" rel="noopener">GitHub ↗</a></div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="blob b1"></div><div class="blob b2"></div>
+  <div class="wrap hgrid">
+    <div>
+      <p class="eyebrow r">A Go CLI for landing pages</p>
+      <h1 class="r" data-d="80">Answer a few questions. <span class="grad">Ship the site.</span></h1>
+      <p class="lead muted r" data-d="160">Go With The Flow turns your choices into a complete Astro website: sections, styles, fonts, animation and content files, all generated in seconds.</p>
+      <div class="cta r" data-d="240"><a href="https://github.com/therohantomar/go_with_theflow" target="_blank" rel="noopener" class="btn">Download on GitHub ↗</a><a href="#how" class="btn ghost">See how it works</a></div>
+    </div>
+    <div class="term r" data-d="200"><div class="dots"><i></i><i></i><i></i></div><div id="term" aria-label="Animated terminal demo"></div></div>
+  </div>
+</section>
+
+<div class="strip"><div class="mq" aria-hidden="true">
+  <span>Go <b>✦</b></span><span>Astro <b>✦</b></span><span>Tailwind <b>✦</b></span><span>motion <b>✦</b></span><span>anime.js <b>✦</b></span><span>sharp <b>✦</b></span><span>Fontsource <b>✦</b></span>
+  <span>Go <b>✦</b></span><span>Astro <b>✦</b></span><span>Tailwind <b>✦</b></span><span>motion <b>✦</b></span><span>anime.js <b>✦</b></span><span>sharp <b>✦</b></span><span>Fontsource <b>✦</b></span>
+</div></div>
+
+<section id="how"><div class="wrap">
+  <p class="eyebrow r">How it works</p><h2 class="r">Choices in. Website out.</h2>
+  <div class="track r"><i></i></div>
+  <div class="steps">
+    <div class="card r"><div class="num">1</div><h3>Choose</h3><p class="muted">Pick your package manager, industry, template style, sections, layouts, colors, fonts, CTAs and animation level.</p><div class="mini">› npm · pnpm · yarn · bun</div></div>
+    <div class="card r" data-d="120"><div class="num">2</div><h3>Save as JSON</h3><p class="muted">Every choice becomes state, and all page copy lives in one JSON file per section.</p><div class="mini">src/content/hero.json</div></div>
+    <div class="card r" data-d="240"><div class="num">3</div><h3>Generate</h3><p class="muted">A curated Astro component library is resolved from your choices. Output is deterministic, with no AI and no backend.</p><div class="mini">Astro + Tailwind v4</div></div>
+    <div class="card r" data-d="360"><div class="num">4</div><h3>Customize</h3><p class="muted">Edit the JSON, drop photos into <code>src/assets</code>, run the dev server and deploy anywhere.</p><div class="mini">npm run dev</div></div>
+  </div>
+</div></section>
+
+<section id="features"><div class="wrap">
+  <p class="eyebrow r">Features</p><h2 class="r" style="max-width:720px">Everything a landing page needs, already wired.</h2>
+  <div class="bento" style="margin-top:36px">
+    <div class="card w2 h2r r"><div class="big">20</div><h3 style="margin-top:8px">Sections, two layouts each</h3><p class="muted">Carousels, header pointers with image, timelines, pricing tiers, counters and more.</p>
+      <div class="chips"><span class="chip">Hero</span><span class="chip">Logos</span><span class="chip">Stats</span><span class="chip">Features</span><span class="chip">Products</span><span class="chip">Process</span><span class="chip">Video</span><span class="chip">Gallery</span><span class="chip">Pricing</span><span class="chip">Testimonials</span><span class="chip">Team</span><span class="chip">Blog</span><span class="chip">FAQ</span><span class="chip">Quote form</span><span class="chip">CTA</span><span class="chip">Newsletter</span><span class="chip">Contact</span></div></div>
+    <div class="card r" data-d="80"><div class="big">5</div><h3 style="margin-top:8px">Template styles</h3><p class="muted">Bold, editorial, industrial, creative dark and soft. Industries stop looking alike.</p></div>
+    <div class="card r" data-d="160"><div class="big">25</div><h3 style="margin-top:8px">Fonts</h3><p class="muted">Jakarta, Urbanist, Outfit, Sora and more, self-hosted with Fontsource.</p></div>
+    <div class="card w2 r" data-d="120"><h3>Section-wise JSON content</h3><p class="muted">Change a headline without touching a component.</p><div class="mini"><code>{ "headline": "Boxes that protect.", "image": "hero-1.jpg" }</code></div></div>
+    <div class="card r" data-d="80"><h3>Sharp-optimized images</h3><p class="muted">Photos live in <code>src/assets</code>. Build output is AVIF and WebP in several sizes.</p></div>
+    <div class="card r" data-d="160"><h3>Animation, your call</h3><p class="muted">Try the levels:</p>
+      <div class="chips" id="lv"><button class="chip" aria-pressed="false" data-l="none">None</button><button class="chip" aria-pressed="false" data-l="subtle">Subtle</button><button class="chip" aria-pressed="true" data-l="expressive">Expressive</button></div><div class="demo" id="demo" data-l="expressive"></div></div>
+    <div class="card r" data-d="80"><h3>Responsive by default</h3><p class="muted">Mobile hamburger menu, fluid type and touch-friendly carousels.</p></div>
+    <div class="card r" data-d="160"><h3>Your package manager</h3><p class="muted">npm, pnpm, yarn or bun, chosen at the start.</p></div>
+  </div>
+</div></section>
+
+<section id="styles"><div class="wrap">
+  <p class="eyebrow r">Try it live</p><h2 class="r">Change the choices. Watch the site change.</h2>
+  <p class="muted r" style="max-width:620px;margin:14px 0 32px">This is the real idea behind the CLI: your answers become a config, and the config becomes a site. Pick an industry and a template style.</p>
+  <div class="try">
+    <div class="ctl r">
+      <h3>Industry</h3><div class="chips" id="ci"></div>
+      <h3>Template style</h3><div class="chips" id="cs"></div>
+      <div class="cfg" id="cfg" aria-live="polite"></div>
+    </div>
+    <div class="bw r" data-d="120"><div class="bbar"><i></i><i></i><i></i><span id="url"></span></div>
+      <div id="pv"><div class="sh"><b id="sn"></b><span class="sl"><span>Home</span><span>Shop</span><span>About</span><span>Contact</span></span><span class="sb" id="sb"></span></div>
+        <div class="hp go" id="hp"><small id="se"></small><h4 id="sh1"></h4><p id="ss"></p><div><a id="sc1"></a><a id="sc2"></a></div></div>
+        <div class="gi"><div id="g1"></div><div id="g2"></div><div id="g3"></div></div></div></div>
+  </div>
+</div></section>
+
+<section><div class="wrap"><div class="stats">
+  <div class="card r"><div class="big"><span data-n="20">0</span></div><p class="muted">sections</p></div>
+  <div class="card r" data-d="80"><div class="big"><span data-n="12">0</span></div><p class="muted">industries</p></div>
+  <div class="card r" data-d="160"><div class="big"><span data-n="25">0</span></div><p class="muted">fonts</p></div>
+  <div class="card r" data-d="240"><div class="big"><span data-n="3">0</span></div><p class="muted">animation levels</p></div>
+</div></div></section>
+
+<section id="start"><div class="wrap two">
+  <div><p class="eyebrow r">Quick start</p><h2 class="r">Download it. Run it. Ship a site.</h2><p class="muted r" style="margin:16px 0">Requires Go 1.22+ and Node.js. The CLI offers to install dependencies for you.</p><a class="btn r" href="https://github.com/therohantomar/go_with_theflow" target="_blank" rel="noopener">Download on GitHub ↗</a></div>
+  <div class="code r" data-d="120"><button class="btn ghost copy" id="copy" style="color:#e8e8ee;border-color:rgba(255,255,255,.2)">Copy</button><span class="cm"># download and run the wizard</span><br><span id="cmd">git clone https://github.com/therohantomar/go_with_theflow.git<br>cd go_with_theflow<br>go mod tidy<br>go run ./cmd/flow new</span></div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap two">
+  <div class="card r"><h3>What you get</h3><div class="tree" style="margin-top:14px">your-project/
+├─ src/
+│  ├─ components/  sections, layout
+│  ├─ content/     one JSON per section
+│  ├─ assets/      empty photo folders
+│  └─ scripts/     animations
+├─ flow.json       your saved choices
+└─ package.json</div></div>
+  <div class="card r" data-d="120"><h3>Roadmap</h3><p class="muted">Available now: <code>flow new</code>. Next up: <code>flow list</code>, <code>flow edit</code>, <code>flow generate</code> and <code>flow preview</code>, plus working form endpoints.</p><div class="chips"><span class="chip">✔ Wizard</span><span class="chip">✔ 20 sections</span><span class="chip">✔ 5 styles</span><span class="chip">○ Edit projects</span><span class="chip">○ Web UI</span></div></div>
+</div></section>
+
+<section id="faq"><div class="wrap" style="max-width:820px">
+  <p class="eyebrow r">FAQ</p><h2 class="r">Questions, answered.</h2>
+  <div class="r" style="margin-top:28px">
+    <details><summary>Do I need to know Go?</summary><p>Only to build the CLI from source. Using it is just answering prompts. The site it creates is a regular Astro project you can edit with normal web tools.</p></details>
+    <details><summary>Is AI involved?</summary><p>No. Generation is deterministic: the same choices always produce the same site, built from a curated component library.</p></details>
+    <details><summary>Can I change things after generating?</summary><p>Yes. Edit the JSON in <code>src/content</code>, drop photos into <code>src/assets</code>, or change the Astro components directly.</p></details>
+    <details><summary>Where can I host the result?</summary><p>It builds to static files (<code>npm run build</code> → <code>dist/</code>), so Vercel, Netlify, Cloudflare Pages or any static host works.</p></details>
+    <details><summary>Can I reopen a project and edit my choices?</summary><p>Not yet. <code>flow list</code> and <code>flow edit</code> are on the roadmap. For now, edit the generated files or run the wizard again.</p></details>
+    <details><summary>Do the contact and newsletter forms send anything?</summary><p>Not yet. They are visual placeholders until you connect your own form endpoint.</p></details>
+  </div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap"><div class="final r">
+  <div class="blob b1" style="opacity:.25"></div>
+  <h2 style="position:relative">Go with the flow.</h2>
+  <p class="muted" style="position:relative;margin:16px auto 26px;max-width:460px">Stop starting from a blank page. Choose, generate, publish.</p>
+  <a href="https://github.com/therohantomar/go_with_theflow" target="_blank" rel="noopener" class="btn" style="position:relative">Get it on GitHub ↗</a>
+</div></div></section>
+</main>
+
+<footer><div class="wrap" style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px"><span>© <span id="yr">2026</span> Go With The Flow</span><span>Built with Go, Astro and Tailwind · <a href="https://github.com/therohantomar/go_with_theflow" target="_blank" rel="noopener" style="text-decoration:underline">GitHub</a></span></div></footer>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+try{const t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}
+$("#theme").onclick=()=>{const d=document.documentElement,dark=d.dataset.theme?d.dataset.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;d.dataset.theme=dark?"light":"dark";try{localStorage.setItem("theme",d.dataset.theme)}catch(e){}};
+$("#yr").textContent=new Date().getFullYear();
+const mb=$("#mb"),mm=$("#mm"),setM=o=>{mb.setAttribute("aria-expanded",o);mm.hidden=!o};
+mb.onclick=()=>setM(mb.getAttribute("aria-expanded")!=="true");
+$$("#mm a").forEach(a=>a.onclick=()=>setM(false));
+addEventListener("keydown",e=>e.key==="Escape"&&setM(false));
+matchMedia("(min-width:800px)").onchange=e=>e.matches&&setM(false);
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.15});
+$$(".r").forEach(el=>{el.style.transitionDelay=(el.dataset.d||0)+"ms";io.observe(el)});
+const co=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;co.unobserve(e.target);const el=e.target,n=+el.dataset.n;if(reduce){el.textContent=n;return}const t0=performance.now();(function f(t){const p=Math.min((t-t0)/1400,1);el.textContent=Math.round(n*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)})(t0)}),{threshold:.6});
+$$("[data-n]").forEach(el=>co.observe(el));
+$$("#lv .chip").forEach(b=>b.onclick=()=>{$$("#lv .chip").forEach(x=>x.setAttribute("aria-pressed",x===b));$("#demo").dataset.l=b.dataset.l});
+$("#copy").onclick=async()=>{try{await navigator.clipboard.writeText($("#cmd").innerText);$("#copy").textContent="Copied ✔";setTimeout(()=>$("#copy").textContent="Copy",1800)}catch(e){}};
+const T=$("#term"),L=[["c","$ flow new"],["q","? Package manager  › pnpm"],["q","? What are we building?  › Fashion & Apparel"],["q","? Template style  › Editorial Minimal"],["q","? Sections  › hero, products, lookbook, cta"],["q","? Add animations?  › Subtle"],["ok","✔ Generated ./atelier-store"]];
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+(async function run(){for(;;){T.innerHTML="";for(const [k,t] of L){const d=document.createElement("div");d.className=k;T.append(d);if(reduce){d.textContent=t;continue}for(const ch of t){d.textContent+=ch;await sleep(k==="c"?70:20)}await sleep(450)}if(reduce)return;await sleep(2800)}})();
+
+const IN={fashion:{n:"Atelier",u:"atelier.store",h:"Wear what moves you.",s:"The new collection is here. Designed to be worn hard.",c:["Shop now","Lookbook"],i:["Men","Women","Sport"],p:["#111111","#ff4d00"]},
+packaging:{n:"BoxCraft",u:"boxcraft.in",h:"Boxes that protect. Packaging that sells.",s:"Corrugated boxes and cartons, made to your size.",c:["Get a quote","Products"],i:["Corrugated","Mailer boxes","Gift boxes"],p:["#3b2a1a","#c8872e"]},
+saas:{n:"Flowdesk",u:"flowdesk.app",h:"Software that gets out of your way.",s:"One workspace for your whole team.",c:["Start free","Book demo"],i:["Tasks","Docs","Reports"],p:["#4f46e5","#06b6d4"]},
+home:{n:"Haven Homes",u:"havenhomes.com",h:"Find the place that fits your life.",s:"Homes, rentals and property management.",c:["Browse homes","Talk to us"],i:["Apartments","Villas","Commercial"],p:["#1e3a5f","#c9a227"]}};
+const IL={fashion:"Fashion & Apparel",packaging:"Packaging & Boxes",saas:"SaaS",home:"Real Estate"};
+const B={sglow:.3,srb:"999px",srr:"16px",sht:"none",shw:"700",shl:"-.02em",shs:"2.2rem",shf:"'Plus Jakarta Sans',sans-serif"};
+const ST={
+bold:{n:"Bold Sport",hero:"giant",anim:"expressive",hf:"Oswald",sbg:"#ffffff",sink:"#111111",sacc:"#ff4d00",sacct:"#ffffff",shb:"#111111",shc:"#ffffff",sglow:0,srb:"0px",srr:"0px",sht:"uppercase",shf:"Oswald,Impact,sans-serif",shs:"2.9rem",shl:"-.01em"},
+editorial:{n:"Editorial Minimal",hero:"editorial",anim:"subtle",hf:"Cormorant Garamond",sbg:"#fbfaf8",sink:"#1a1a1a",sacc:"#8a7968",sacct:"#ffffff",shb:"#f3f0eb",shc:"#1a1a1a",sglow:0,srb:"0px",srr:"0px",shw:"400",shf:"'Cormorant Garamond',Georgia,serif",shs:"2.7rem",shl:"0"},
+industrial:{n:"Industrial Catalog",hero:"banner",anim:"subtle",hf:"Plus Jakarta Sans",sbg:"#ffffff",sink:"#1f2937",sacct:"#111111",shc:"#ffffff",sglow:0,srb:"4px",srr:"6px",shw:"800",shl:"-.01em",shs:"2.2rem"},
+creative:{n:"Creative Dark",hero:"giant",anim:"expressive",hf:"Syne",sbg:"#0b0b0d",sink:"#ececec",sacc:"#c6ff3d",sacct:"#0b0b0d",shb:"#0b0b0d",shc:"#ececec",sglow:.55,srb:"999px",srr:"24px",shw:"600",shf:"Syne,sans-serif",shs:"2.8rem",shl:"-.04em"},
+soft:{n:"Soft Classic",hero:"split",anim:"subtle",hf:"Plus Jakarta Sans",sbg:"#ffffff",sink:"#1f2937",sacct:"#ffffff",shb:"#eef1f8",shc:"#1f2937",sglow:.25}};
+let ci="fashion",cs="editorial";
+function chips(id,obj,get,set){const el=$(id);el.innerHTML="";for(const k in obj){const b=document.createElement("button");b.className="chip";b.textContent=obj[k].n||obj[k];b.setAttribute("aria-pressed",get()===k);b.onclick=()=>{set(k);render()};el.append(b)}}
+function render(){const i=IN[ci],s={...B,...ST[cs]};
+ if(cs==="industrial"){s.sacc=i.p[1];s.shb=i.p[0]}
+ if(cs==="soft"){s.sacc=i.p[0]}
+ const pv=$("#pv");for(const k of ["sbg","sink","sacc","sacct","shb","shc","sglow","srb","srr","sht","shw","shl","shs","shf"])pv.style.setProperty("--"+k,s[k]);
+ $("#sn").textContent=i.n;$("#url").textContent="https://"+i.u;$("#sb").textContent=i.c[0];$("#se").textContent=ST[cs].n;
+ $("#sh1").textContent=i.h;$("#ss").textContent=i.s;$("#sc1").textContent=i.c[0];$("#sc2").textContent=i.c[1];
+ [1,2,3].forEach(n=>$("#g"+n).textContent=i.i[n-1]);
+ $("#cfg").innerHTML="{\n  <b>\"industry\"</b>: \""+ci+"\",\n  <b>\"style\"</b>: \""+cs+"\",\n  <b>\"hero\"</b>: \""+s.hero+"\",\n  <b>\"font\"</b>: \""+s.hf+"\",\n  <b>\"colors\"</b>: [\""+(cs==="industrial"?i.p[0]:s.sacc)+"\", \""+s.sink+"\"],\n  <b>\"animation\"</b>: \""+s.anim+"\"\n}";
+ chips("#ci",Object.fromEntries(Object.keys(IN).map(k=>[k,{n:IL[k]}])),()=>ci,k=>ci=k);chips("#cs",ST,()=>cs,k=>cs=k);
+ if(!reduce){const h=$("#hp");h.classList.remove("go");void h.offsetWidth;h.classList.add("go")}}
+render();
+</script>
+</body>
+</html>
